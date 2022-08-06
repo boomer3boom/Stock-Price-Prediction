@@ -13,7 +13,9 @@ from keras.layers import LSTM,Dropout,Dense
 from sklearn.preprocessing import MinMaxScaler
 
 # %%
+#Open the dataset and have a quick look
 df = pd.read_csv("NSE-TATA.csv")
 df.head()
 
+#%%
 df['Date'] = pd.to_datetime(df.Date, format = '%Y-%m-%d')
