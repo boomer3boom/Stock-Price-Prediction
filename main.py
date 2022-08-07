@@ -21,6 +21,7 @@ value.
 df = pd.read_csv("NSE-TATA.csv")
 df.head()
 
+
 #%%
 """
 The goal in this section is to create a graph that let us analyse the
@@ -35,6 +36,7 @@ df.index=df['Date']
 plt.figure(figsize=(16,8))
 #plot our graph with y axis as the close value, and x axis as index (date)
 plt.plot(df["Close"],label='Close Price history')
+
 
 #%%
 """
@@ -53,4 +55,17 @@ for i in range(0,len(data)):
     new_dataset["Date"][i]=data['Date'][i]
     new_dataset["Close"][i]=data["Close"][i]
 
+
 # %%
+"""
+Normalise the training data so that they all have the
+same format
+"""
+
+#scaler can transform all given input into (0, 1)
+scaler=MinMaxScaler(feature_range=(0,1))
+
+#return the values of new_dataset in nested list
+final_dataset=new_dataset.values
+
+print(final_dataset)
