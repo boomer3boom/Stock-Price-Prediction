@@ -52,20 +52,47 @@ new_dataset=pd.DataFrame(index=range(0,len(df)),columns=['Date','Close'])
 #Convert our Date and Close in Daa into new_dataset
 for i in range(0,len(data)):
     #Assign the ith position of Date/Close to the ith position in data
-    new_dataset["Date"][i]=data['Date'][i]
+    new_dataset["Date"][i]=data["Date"][i]
     new_dataset["Close"][i]=data["Close"][i]
 
 
 # %%
 """
 Normalise the training data so that they all have the
-same format
+same format. Also filter these data into training,
+validation, as well as it's x and y component
 """
-
-#scaler can transform all given input into (0, 1)
-scaler=MinMaxScaler(feature_range=(0,1))
+#scaler=MinMaxScaler(feature_range=(0,1))
 
 #return the values of new_dataset in nested list
 final_dataset=new_dataset.values
 
-print(final_dataset)
+#The training and validation component of dataset
+train_data=final_dataset[0:987,:]
+valid_data=final_dataset[987:,:]
+
+#scaler can transform all given input into (0, 1)
+scaler=MinMaxScaler(feature_range=(0,1))
+
+#Transform our dataset into the range of (0,1)
+scaled_data=scaler.fit_transform(final_dataset)
+
+x_train_data,y_train_data=[],[]
+
+#Append our scaled data into 
+for i in range(60,len(train_data)):
+
+    #We need to cover 60-timestamp for the RNN to predict the 61st price. 
+    #So x_train is nested each containing 60-time stamp prices
+    x_train_data.append(scaled_data[i-60:i,0])
+
+    #y_train contains the stock price everyday which is the stock price 
+    #corresponding to reach list in x_train.
+    y_train_data.append(scaled_data[i,0])
+
+x_train_data,y_train_data=np.array(x_train_data),np.array(y_train_data)
+
+#reshape into (x_train_data.shape[0],x_train_data.shape[1], 1) -> (927,60,1)
+#This is in the form (batch size, number of timestamp, number of key features)
+x_train_data=np.reshape(x_train_data,
+    (x_train_data.shape[0],x_train_data.shape[1],1))
