@@ -1,6 +1,7 @@
 #Import library
 from ast import increment_lineno
 from dataclasses import dataclass
+from msilib import sequence
 import pandas as pd
 import numpy as np
 
@@ -96,3 +97,23 @@ x_train_data,y_train_data=np.array(x_train_data),np.array(y_train_data)
 #This is in the form (batch size, number of timestamp, number of key features)
 x_train_data=np.reshape(x_train_data,
     (x_train_data.shape[0],x_train_data.shape[1],1))
+
+# %%
+"""
+Building the long short term memmory model for our model to memorise 
+things and apply it to prediction.
+"""
+
+#The sequential model allows a linear stack of layers
+lstm_model = Sequential(
+    [
+    #The output is 50 unit, and return the full sequence. 
+    LSTM(units=50,return_sequences=True, input_shape = (x_train_data.shape[1],2)),
+    LSTM(units=50),
+    #Dense makes it so all neruron recieves input from neurons in the previous layer
+    #Unit is 1, since we only have 1 prediction.
+    Dense(1)
+    ]
+)
+
+lstm_model.summary()
