@@ -117,3 +117,11 @@ lstm_model = Sequential(
 )
 
 lstm_model.summary()
+
+#%%
+"""
+Compiling our model and training it
+"""
+
+lstm_model.compile(loss='mean_squared_error',optimizer='adam')
+lstm_model.fit(x_train_data,y_train_data,epochs=1,batch_size=1,verbose=2)
